@@ -1,5 +1,8 @@
 package com.tcs.catalog.domain;
 
+import com.tcs.catalog.domain.category.Category;
+import com.tcs.catalog.domain.utils.IdUtils;
+import com.tcs.catalog.domain.utils.InstantUtils;
 import net.datafaker.Faker;
 
 import java.math.BigDecimal;
@@ -52,6 +55,33 @@ public final class Fixture {
 
     public static boolean bool() {
         return FAKER.bool().bool();
+    }
+
+    public static final class Categories {
+
+        public static Category prime() {
+            return Category.with(
+                    IdUtils.uuid(),
+                    "Prime",
+                    "Amazon Prime Videos",
+                    true,
+                    InstantUtils.now(),
+                    InstantUtils.now(),
+                    null
+            );
+        }
+
+        public static Category netflix() {
+            return Category.with(
+                    IdUtils.uuid(),
+                    "Netflix",
+                    "Netflix Videos",
+                    true,
+                    InstantUtils.now(),
+                    InstantUtils.now(),
+                    null
+            );
+        }
     }
 
 }
