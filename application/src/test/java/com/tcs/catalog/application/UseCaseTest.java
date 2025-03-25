@@ -1,11 +1,9 @@
 package com.tcs.catalog.application;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @Tag("unitTest")
-public abstract class UseCaseTest {
-
-    @BeforeEach
-    abstract protected void cleanUp();
-}
+@ExtendWith(MockitoExtension.class)
+public abstract class UseCaseTest { }
