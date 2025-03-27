@@ -2,9 +2,13 @@ package com.tcs.catalog.infrastructure.graphql;
 
 import com.tcs.catalog.application.category.list.ListCategoryOutput;
 import com.tcs.catalog.application.category.list.ListCategoryUseCase;
+import com.tcs.catalog.application.category.save.SaveCategoryUseCase;
 import com.tcs.catalog.domain.Fixture;
+import com.tcs.catalog.domain.category.Category;
 import com.tcs.catalog.domain.category.CategorySearchQuery;
 import com.tcs.catalog.domain.pagination.Pagination;
+import com.tcs.catalog.domain.utils.IdUtils;
+import com.tcs.catalog.domain.utils.InstantUtils;
 import com.tcs.catalog.infrastructure.GraphQLControllerTest;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -13,9 +17,11 @@ import org.springframework.graphql.test.tester.GraphQlTester;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -24,6 +30,9 @@ public class CategoryGraphQLControllerTest {
 
     @MockitoBean
     private ListCategoryUseCase listCategoryUseCase;
+
+    @MockitoBean
+    private SaveCategoryUseCase saveCategoryUseCase;
 
     @Autowired
     private GraphQlTester graphql;
@@ -128,5 +137,58 @@ public class CategoryGraphQLControllerTest {
         assertEquals(expectedTerms, actualQuery.terms());
         assertEquals(expectedSort, actualQuery.sort());
         assertEquals(expectedDirection, actualQuery.direction());
+    }
+
+    @Test
+    public void givenCategoryInput_whenCallsSaveCategoryMutation_thenPersistAndReturnIt() {
+        final var expectedId = IdUtils.uuid();
+        final var expectedName = "Prime";
+        final var expectedDescription = "Most watched";
+        final var expectedActive = false;
+        final var expectedCreatedAt = InstantUtils.now();
+        final var expectedUpdatedAt = InstantUtils.now();
+        final var expectedDeletedAt = InstantUtils.now();
+
+        final var input = Map.of(
+                "id", expectedId,
+                "name", expectedName,
+                "description", expectedDescription,
+                "active", expectedActive,
+                "createdAt", expectedCreatedAt.toString(),
+                "updatedAt", expectedUpdatedAt.toString(),
+                "deletedAt", expectedDeletedAt.toString()
+        );
+
+        final var aMutation = """
+                mutation SaveCategory($input: CategoryInput!) {
+                    category: saveCategory(input: $input) {
+                        id
+                        name
+                        description
+                    }
+                }
+                """;
+
+        doAnswer(returnsFirstArg())
+                .when(saveCategoryUseCase).execute(any());
+
+        this.graphql.document(aMutation)
+                .variable("input", input)
+                .execute()
+                .path("category.id").entity(String.class).isEqualTo(expectedId)
+                .path("category.name").entity(String.class).isEqualTo(expectedName)
+                .path("category.description").entity(String.class).isEqualTo(expectedDescription);
+
+        final var captor = ArgumentCaptor.forClass(Category.class);
+        verify(saveCategoryUseCase, times(1)).execute(captor.capture());
+
+        final var actualCategory = captor.getValue();
+        assertEquals(expectedId, actualCategory.id());
+        assertEquals(expectedName, actualCategory.name());
+        assertEquals(expectedDescription, actualCategory.description());
+        assertEquals(expectedActive, actualCategory.active());
+        assertEquals(expectedCreatedAt, actualCategory.createdAt());
+        assertEquals(expectedUpdatedAt, actualCategory.updatedAt());
+        assertEquals(expectedDeletedAt, actualCategory.deletedAt());
     }
 }
