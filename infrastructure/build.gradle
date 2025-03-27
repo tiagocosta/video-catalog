@@ -29,6 +29,7 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-graphql')
     implementation('org.springframework.boot:spring-boot-starter-security')
     implementation('org.springframework.boot:spring-boot-starter-oauth2-resource-server')
+    implementation('org.springframework.boot:spring-boot-starter-data-elasticsearch')
 
     implementation('com.fasterxml.jackson.module:jackson-module-afterburner')
 
