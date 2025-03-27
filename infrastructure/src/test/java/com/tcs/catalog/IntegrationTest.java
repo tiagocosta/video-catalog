@@ -1,7 +1,9 @@
-package com.tcs.catalog.infrastructure;
+package com.tcs.catalog;
 
 import com.tcs.catalog.infrastructure.configuration.WebServerConfig;
 import org.junit.jupiter.api.Tag;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchRepositoriesAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -11,7 +13,13 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @ActiveProfiles("test-integration")
-@SpringBootTest(classes = WebServerConfig.class)
+@EnableAutoConfiguration(exclude = {
+        ElasticsearchRepositoriesAutoConfiguration.class
+})
+@SpringBootTest(classes = {
+        WebServerConfig.class,
+        IntegrationTestConfiguration.class
+})
 @Tag("integrationTest")
 public @interface IntegrationTest {
 }

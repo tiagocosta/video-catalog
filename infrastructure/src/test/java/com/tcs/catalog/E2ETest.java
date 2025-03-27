@@ -1,4 +1,4 @@
-package com.tcs.catalog.infrastructure;
+package com.tcs.catalog;
 
 import com.tcs.catalog.infrastructure.configuration.WebServerConfig;
 import org.junit.jupiter.api.Tag;

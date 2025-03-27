@@ -9,7 +9,7 @@ import com.tcs.catalog.domain.category.CategorySearchQuery;
 import com.tcs.catalog.domain.pagination.Pagination;
 import com.tcs.catalog.domain.utils.IdUtils;
 import com.tcs.catalog.domain.utils.InstantUtils;
-import com.tcs.catalog.infrastructure.GraphQLControllerTest;
+import com.tcs.catalog.GraphQLControllerTest;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
