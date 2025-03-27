@@ -7,9 +7,13 @@ services:
     container_name: elk_es01
     restart: on-failure
     volumes:
-      - ../.docker/es01:/usr/share/elasticsearch/data
+      - es01:/usr/share/elasticsearch/data
     environment:
       - "discovery.type=single-node"
+      - "bootstrap.memory_lock=true"
+      - "cluster.name=tcsflix"
+      - "node.name=es01"
+      - "ES_JAVA_OPTS=-Xms512mb -Xmx512mb"
     ports:
       - '9200:9200'
       - '9300:9300'
@@ -42,6 +46,10 @@ services:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - elastic
+
+volumes:
+  es01:
+    external: true
 
 networks:
   elastic:
