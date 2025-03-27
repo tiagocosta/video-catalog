@@ -1,3 +1,8 @@
+elasticsearch:
+  uris: ${ELASTICSEARCH_URIS}
+  username: ${ELASTICSEARCH_USERNAME}
+  password: ${ELASTICSEARCH.password_PASSWORD}
+
 keycloak:
-  realm: ${KEYCLOAK_REALM:tcs-codeflix}
-  host: ${KEYCLOAK_HOST:http:://localhost:8443}
+  realm: ${KEYCLOAK_REALM}
+  host: ${KEYCLOAK_HOST}
