@@ -82,6 +82,18 @@ public final class Fixture {
                     null
             );
         }
+
+        public static Category mostWatched() {
+            return Category.with(
+                    IdUtils.uuid(),
+                    "Most watched",
+                    "Most watched",
+                    false,
+                    InstantUtils.now(),
+                    InstantUtils.now(),
+                    InstantUtils.now()
+            );
+        }
     }
 
 }
